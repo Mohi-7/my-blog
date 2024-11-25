@@ -1,23 +1,32 @@
-// Handle Blog Post Submission
-const blogForm = document.getElementById('blog-form');
-const blogInput = document.getElementById('blog-input');
+// Get references
 const blogContainer = document.getElementById('blog-container');
+const addBlogBtn = document.getElementById('add-blog-btn');
 
-blogForm.addEventListener('submit', (event) => {
-  event.preventDefault();
+// Load blogs from localStorage
+function loadBlogs() {
+  const blogs = JSON.parse(localStorage.getItem('blogs')) || [];
+  blogContainer.innerHTML = '';
+  blogs.forEach(blog => {
+    const blogPost = document.createElement('div');
+    blogPost.className = 'blog-post';
+    blogPost.textContent = blog;
+    blogContainer.appendChild(blogPost);
+  });
+}
 
-  const newBlog = document.createElement('div');
-  newBlog.classList.add('blog-post');
-  newBlog.textContent = blogInput.value;
+// Save a new blog
+function addBlog() {
+  const newBlog = prompt('Enter your blog content:');
+  if (newBlog) {
+    const blogs = JSON.parse(localStorage.getItem('blogs')) || [];
+    blogs.push(newBlog);
+    localStorage.setItem('blogs', JSON.stringify(blogs));
+    loadBlogs();
+  }
+}
 
-  blogContainer.appendChild(newBlog);
-  blogInput.value = ''; // Clear input after submission
-});
+// Attach event listener
+addBlogBtn.addEventListener('click', addBlog);
 
-// Handle Contact Form Submission (Demo Purpose)
-const contactForm = document.getElementById('contact-form');
-contactForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-  alert('Thank you for reaching out! I will get back to you soon.');
-  contactForm.reset();
-});
+// Load blogs on page load
+loadBlogs();
