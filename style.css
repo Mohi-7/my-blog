@@ -3,12 +3,12 @@ body {
   font-family: Arial, sans-serif;
    margin: 0;
   padding: 0;
-  background: #f9f9f9;
+  background:#99FF33;
 }
 
 header {
-  background-color: #4CAF50;
-  color: white;
+  background-color:#FF00FF;
+  color: Blue;
   padding: 1rem;
   text-align: center;
 }
@@ -32,7 +32,7 @@ main {
 }
 
 .blog-post {
-  background: white;
+  background: black;
   margin: 1rem 0;
   padding: 1rem;
   border-radius: 5px;
@@ -41,7 +41,7 @@ main {
 
 footer {
   background: #333;
-  color: white;
+  color:yellow;
   text-align: center;
   padding: 0.5rem;
   position: fixed;
