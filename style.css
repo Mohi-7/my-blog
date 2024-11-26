@@ -1,5 +1,5 @@
 body {
-  background-color: #f0f0f0;
+  background-color:#000000;
   font-family: Arial, sans-serif;
    margin: 0;
   padding: 0;
@@ -7,7 +7,7 @@ body {
 }
 
 header {
-  background-color:#FF00FF;
+  background-color:#00FFFF;
   color: Blue;
   padding: 1rem;
   text-align: center;
@@ -15,7 +15,7 @@ header {
 
 header button {
   background-color: white;
-  color: #4CAF50;
+  color:#ffffff;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 5px;
@@ -23,8 +23,9 @@ header button {
   font-size: 1rem;
 }
 
-header button:hover {
-  background-color: #45a049;
+header button: hover {
+  background-color:#000000;
+  color:white;
 }
 
 main {
@@ -32,7 +33,7 @@ main {
 }
 
 .blog-post {
-  background: black;
+  background: white;
   margin: 0.5rem 0;
   padding: 1rem;
   border-radius: 5px;
