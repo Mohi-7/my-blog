@@ -1,46 +1,86 @@
-const postButton = document.getElementById('postButton');
-const blogInput = document.getElementById('blogInput');
-const categorySelect = document.getElementById('category');
-const entriesContainer = document.getElementById('entriesContainer');
-const moodButtons = document.querySelectorAll('.mood-btn');
+// Initialize or retrieve stored mood data
+const moodData = JSON.parse(localStorage.getItem("moodData")) || [];
+const today = new Date().toISOString().split("T")[0]; // Get today's date
 
-let mood = '';
+// Save Mood Function
+function saveMood(mood) {
+  // Check if mood for today already exists
+  const existingEntryIndex = moodData.findIndex(entry => entry.date === today);
 
-moodButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        mood = button.dataset.mood;
-        alert(`Mood selected: ${mood}`);
-    });
-});
+  if (existingEntryIndex !== -1) {
+    // Update the existing entry
+    moodData[existingEntryIndex].mood = mood;
+  } else {
+    // Add new entry
+    moodData.push({ date: today, mood: mood });
+  }
 
-function loadEntries() {
-    const entries = JSON.parse(localStorage.getItem('entries')) || [];
-    entriesContainer.innerHTML = '';
-    entries.forEach(entry => {
-        const entryElement = document.createElement('div');
-        entryElement.classList.add('entry');
-        entryElement.innerHTML = `
-            <p><strong>Mood:</strong> ${entry.mood}</p>
-            <p><strong>Category:</strong> ${entry.category}</p>
-            <p>${entry.text}</p>
-        `;
-        entriesContainer.appendChild(entryElement);
-    });
+  // Save to localStorage
+  localStorage.setItem("moodData", JSON.stringify(moodData));
+
+  // Refresh the chart
+  renderChart();
+
+  // Notify user
+  alert("Your mood has been saved!");
 }
 
-postButton.addEventListener('click', () => {
-    const text = blogInput.value;
-    const category = categorySelect.value;
-    if (!text || !mood) {
-        alert('Please write something and select your mood!');
-        return;
+// Render Mood Chart
+function renderChart() {
+  const ctx = document.getElementById('moodChart').getContext('2d');
+
+  // Get the past 7 days' data
+  const past7Days = getPast7Days();
+  const moodCounts = { happy: 0, neutral: 0, sad: 0 };
+
+  // Count moods in the last 7 days
+  past7Days.forEach(day => {
+    const entry = moodData.find(entry => entry.date === day);
+    if (entry) moodCounts[entry.mood]++;
+  });
+
+  // Destroy existing chart if it exists (to prevent overlap)
+  if (window.moodChart) window.moodChart.destroy();
+
+  // Create the chart
+  window.moodChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Happy', 'Neutral', 'Sad'],
+      datasets: [{
+        label: '# of Days',
+        data: [moodCounts.happy, moodCounts.neutral, moodCounts.sad],
+        backgroundColor: ['#4caf50', '#ffc107', '#f44336'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1
+          }
+        }
+      }
     }
+  });
+}
 
-    const entries = JSON.parse(localStorage.getItem('entries')) || [];
-    entries.push({ mood, category, text });
-    localStorage.setItem('entries', JSON.stringify(entries));
-    blogInput.value = '';
-    loadEntries();
-});
+// Get Dates for the Past 7 Days
+function getPast7Days() {
+  const dates = [];
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    dates.push(date.toISOString().split('T')[0]);
+  }
+  return dates;
+}
 
-loadEntries();
+// Initial Chart Render
+renderChart();
