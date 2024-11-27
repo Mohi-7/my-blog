@@ -1,25 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Daily Tracker</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohi's Daily Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>Your Daily Tracker</h1>
-  <p>Track your moods and see your weekly trends!</p>
+    <div class="container">
+        <header>
+            <h1>Mohi's Daily Tracker</h1>
+            <p>Track your daily activities with privacy and style!</p>
+        </header>
 
-  <div class="tracker-container">
-    <h3>How are you feeling today?</h3>
-    <div class="emoji-buttons">
-      <button onclick="saveMood('happy')">😊</button>
-      <button onclick="saveMood('neutral')">😐</button>
-      <button onclick="saveMood('sad')">😟</button>
+        <section class="tracker">
+            <div class="mood-selector">
+                <p>How are you feeling today?</p>
+                <button class="mood-btn" data-mood="happy">😊</button>
+                <button class="mood-btn" data-mood="neutral">😐</button>
+                <button class="mood-btn" data-mood="sad">😢</button>
+            </div>
+
+            <div class="entry-section">
+                <textarea id="blogInput" placeholder="Write about your day..."></textarea>
+                <select id="category">
+                    <option value="Work">Work</option>
+                    <option value="Health">Health</option>
+                    <option value="Study">Study</option>
+                    <option value="Personal">Personal</option>
+                </select>
+                <button id="postButton">Post</button>
+            </div>
+
+            <div class="entries">
+                <h2>Your Entries</h2>
+                <div id="entriesContainer"></div>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2024 Mohi's Blog. All rights reserved.</p>
+        </footer>
     </div>
-    <canvas id="moodChart" width="400" height="200"></canvas>
-  </div>
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
