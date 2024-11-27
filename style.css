@@ -1,108 +1,35 @@
 body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    background: linear-gradient(to bottom right, #a1c4fd, #c2e9fb);
-    color: #333;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f0f8ff;
+  margin: 0;
+  padding: 0;
 }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+h1 {
+  color: #4a90e2;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 20px;
+.tracker-container {
+  margin: 20px auto;
+  width: 90%;
+  max-width: 600px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-header h1 {
-    color: #0077ff;
-    font-size: 2.5em;
+.emoji-buttons button {
+  font-size: 24px;
+  padding: 10px 15px;
+  margin: 5px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
 }
 
-.tracker {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.mood-selector {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.mood-btn {
-    font-size: 1.5em;
-    margin: 0 10px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.mood-btn:hover {
-    transform: scale(1.2);
-}
-
-.entry-section {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-textarea {
-    width: 100%;
-    height: 80px;
-    border: 2px solid #0077ff;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 1em;
-    resize: none;
-}
-
-select {
-    padding: 5px;
-    border-radius: 5px;
-    border: 2px solid #0077ff;
-    font-size: 1em;
-}
-
-button {
-    background-color: #0077ff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1em;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-button:hover {
-    background-color: #0056cc;
-}
-
-.entries {
-    margin-top: 20px;
-}
-
-.entries h2 {
-    color: #333;
-}
-
-.entry {
-    background: #f4f4f4;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-footer {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 0.9em;
-    color: #555;
+canvas {
+  margin: 20px auto;
+  max-width: 100%;
 }
