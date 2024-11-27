@@ -29,6 +29,12 @@ h1 {
   border-radius: 5px;
 }
 
+/* Emoji Selected Style */
+.emoji.selected {
+  border: 2px solid #4caf50;  /* Green border for selected emoji */
+  background-color: #f0f4c3;  /* Light background */
+}
+
 canvas {
   margin: 20px auto;
   max-width: 100%;
