@@ -2,6 +2,9 @@
 const moodData = JSON.parse(localStorage.getItem("moodData")) || [];
 const today = new Date().toISOString().split("T")[0]; // Get today's date
 
+// Emoji elements
+const emojiElements = document.querySelectorAll('.emoji');
+
 // Save Mood Function
 function saveMood(mood) {
   // Check if mood for today already exists
@@ -81,6 +84,26 @@ function getPast7Days() {
   }
   return dates;
 }
+
+// Event listener for emoji selection
+emojiElements.forEach((emoji, index) => {
+  emoji.addEventListener('click', () => {
+    // Remove the 'selected' class from all emojis
+    emojiElements.forEach(el => el.classList.remove('selected'));
+
+    // Add 'selected' class to the clicked emoji
+    emoji.classList.add('selected');
+
+    // Determine mood based on the clicked emoji
+    let mood = "";
+    if (index === 0) mood = "happy";   // First emoji = happy
+    if (index === 1) mood = "neutral"; // Second emoji = neutral
+    if (index === 2) mood = "sad";     // Third emoji = sad
+
+    // Save the selected mood
+    saveMood(mood);
+  });
+});
 
 // Initial Chart Render
 renderChart();
