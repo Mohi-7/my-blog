@@ -2,7 +2,7 @@
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
-    background: linear-gradient(to bottom right, #ff9a8b, #ffc3a0);
+    background: #f4f7fc;
     color: #333;
     display: flex;
     justify-content: center;
@@ -19,21 +19,23 @@ body {
     background: #ffffff;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: auto;
 }
 
+/* Header */
 header {
     text-align: center;
     margin-bottom: 20px;
 }
 
 header h1 {
-    color: #ff5c8d;
+    color: #5C6BC0;
     font-size: 2.5em;
-    letter-spacing: 1px;
+    margin-bottom: 10px;
 }
 
 header p {
-    font-size: 1.2em;
+    font-size: 1.1em;
     color: #555;
 }
 
@@ -41,25 +43,46 @@ header p {
 .mood-selector {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    gap: 15px; /* Space between buttons */
+    margin-bottom: 30px; /* Adjusted margin for better spacing */
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.mood-selector p {
+    width: 100%;
+    text-align: center;
+    font-size: 1.3em;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 700;
 }
 
 .mood-btn {
-    font-size: 2.5em;
-    margin: 0 15px;
+    font-size: 3em; /* Increased the button size for better visibility */
+    padding: 10px;
+    margin: 0 10px;
     background: none;
     border: none;
     cursor: pointer;
-    transition: transform 0.3s ease, opacity 0.2s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    border-radius: 50%; /* Added rounded shape to the button */
 }
 
 .mood-btn:hover {
-    transform: scale(1.3);
+    transform: scale(1.2);
+    background-color: #5C6BC0;
+    color: white;
 }
 
 .mood-btn.selected {
     opacity: 1;
-    transition: opacity 0.3s ease;
+    background-color: #5C6BC0;
+    color: white;
+}
+
+.mood-btn:focus {
+    outline: none;
 }
 
 /* Entry section */
@@ -72,7 +95,7 @@ header p {
 textarea {
     width: 100%;
     height: 100px;
-    border: 2px solid #ff5c8d;
+    border: 2px solid #5C6BC0;
     border-radius: 8px;
     padding: 10px;
     font-size: 1.1em;
@@ -83,12 +106,12 @@ textarea {
 select {
     padding: 10px;
     border-radius: 8px;
-    border: 2px solid #ff5c8d;
+    border: 2px solid #5C6BC0;
     font-size: 1em;
 }
 
 button {
-    background-color: #ff5c8d;
+    background-color: #5C6BC0;
     color: white;
     border: none;
     padding: 12px 20px;
@@ -99,7 +122,7 @@ button {
 }
 
 button:hover {
-    background-color: #d14a6d;
+    background-color: #3f4d99;
 }
 
 /* Search functionality */
@@ -114,12 +137,12 @@ button:hover {
     padding: 10px;
     font-size: 1.2em;
     border-radius: 8px;
-    border: 2px solid #ff5c8d;
+    border: 2px solid #5C6BC0;
     transition: border-color 0.3s ease;
 }
 
 #searchInput:focus {
-    border-color: #d14a6d;
+    border-color: #3f4d99;
 }
 
 /* Entries section */
@@ -147,7 +170,7 @@ button:hover {
 
 button.edit-btn,
 button.delete-btn {
-    background-color: #ff5c8d;
+    background-color: #5C6BC0;
     color: white;
     border: none;
     padding: 5px 12px;
@@ -160,7 +183,7 @@ button.delete-btn {
 
 button.edit-btn:hover,
 button.delete-btn:hover {
-    background-color: #d14a6d;
+    background-color: #3f4d99;
 }
 
 /* Footer */
@@ -169,4 +192,23 @@ footer {
     margin-top: 30px;
     font-size: 1em;
     color: #777;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 2em;
+    }
+
+    .mood-btn {
+        font-size: 2em;
+    }
+
+    .entry-section textarea {
+        font-size: 1em;
+    }
+
+    #searchInput {
+        width: 90%;
+    }
 }
