@@ -1,72 +1,55 @@
-let entries = [];
-let selectedMood = '';
+const postButton = document.getElementById('postButton');
+const blogInput = document.getElementById('blogInput');
+const categorySelect = document.getElementById('category');
+const entriesContainer = document.getElementById('entriesContainer');
+const moodButtons = document.querySelectorAll('.mood-btn');
 
-document.querySelectorAll('.mood-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        selectedMood = this.getAttribute('data-mood');
-        document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
-        this.classList.add('selected');
+let mood = localStorage.getItem('selectedMood') || ''; // Get the selected mood from localStorage
+
+// Update the mood button selection based on stored mood
+if (mood) {
+    document.querySelector(`[data-mood="${mood}"]`).classList.add('selected');
+}
+
+moodButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        mood = button.dataset.mood;
+        localStorage.setItem('selectedMood', mood); // Save the selected mood to localStorage
+        alert(`Mood selected: ${mood}`);
+
+        // Highlight the selected mood button
+        moodButtons.forEach(btn => btn.classList.remove('selected'));
+        button.classList.add('selected');
     });
 });
 
-document.getElementById('postButton').addEventListener('click', () => {
-    const blogInput = document.getElementById('blogInput').value.trim();
-    const category = document.getElementById('category').value;
-
-    if (blogInput !== '') {
-        const newEntry = {
-            mood: selectedMood,
-            content: blogInput,
-            category: category,
-            date: new Date().toLocaleDateString(),
-            id: new Date().getTime() // Unique ID for each entry
-        };
-        entries.push(newEntry);
-        displayEntries();
-        document.getElementById('blogInput').value = '';
-    }
-});
-
-document.getElementById('searchInput').addEventListener('input', (event) => {
-    const query = event.target.value.toLowerCase();
-    const filteredEntries = entries.filter(entry => 
-        entry.content.toLowerCase().includes(query) || 
-        entry.category.toLowerCase().includes(query) ||
-        (entry.mood && entry.mood.toLowerCase().includes(query))
-    );
-    displayEntries(filteredEntries);
-});
-
-function displayEntries(entriesToDisplay = entries) {
-    const container = document.getElementById('entriesContainer');
-    container.innerHTML = '';
-    entriesToDisplay.forEach(entry => {
+function loadEntries() {
+    const entries = JSON.parse(localStorage.getItem('entries')) || [];
+    entriesContainer.innerHTML = '';
+    entries.forEach(entry => {
         const entryElement = document.createElement('div');
         entryElement.classList.add('entry');
         entryElement.innerHTML = `
-            <p><strong>Category:</strong> ${entry.category}</p>
             <p><strong>Mood:</strong> ${entry.mood}</p>
-            <p>${entry.content}</p>
-            <small><i>${entry.date}</i></small>
-            <button class="edit-btn" onclick="editEntry(${entry.id})">Edit</button>
-            <button class="delete-btn" onclick="deleteEntry(${entry.id})">Delete</button>
+            <p><strong>Category:</strong> ${entry.category}</p>
+            <p>${entry.text}</p>
         `;
-        container.appendChild(entryElement);
-    });
+        entriesContainer.appendChild(entryElement);
 }
 
-function editEntry(id) {
-    const entry = entries.find(e => e.id === id);
-    document.getElementById('blogInput').value = entry.content;
-    selectedMood = entry.mood;
-    document.querySelectorAll('.mood-btn').forEach(button => button.classList.remove('selected'));
-    document.querySelector(`[data-mood="${selectedMood}"]`).classList.add('selected');
+postButton.addEventListener('click', () => {
+    const text = blogInput.value;
+    const category = categorySelect.value;
+    if (!text || !mood) {
+        alert('Please write something and select your mood!');
+        return;
+    }
 
-    // Remove the entry and re-post it after editing
-    deleteEntry(id);
-}
+    const entries = JSON.parse(localStorage.getItem('entries')) || [];
+    entries.push({ mood, category, text });
+    localStorage.setItem('entries', JSON.stringify(entries));
+    blogInput.value = '';
+    loadEntries();
+});
 
-function deleteEntry(id) {
-    entries = entries.filter(entry => entry.id !== id);
-    displayEntries();
-}
+loadEntries();
