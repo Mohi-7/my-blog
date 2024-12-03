@@ -18,7 +18,8 @@ document.getElementById('postButton').addEventListener('click', () => {
             mood: selectedMood,
             content: blogInput,
             category: category,
-            date: new Date().toLocaleDateString()
+            date: new Date().toLocaleDateString(),
+            id: new Date().getTime() // Unique ID for each entry
         };
         entries.push(newEntry);
         displayEntries();
@@ -47,9 +48,25 @@ function displayEntries(entriesToDisplay = entries) {
             <p><strong>Mood:</strong> ${entry.mood}</p>
             <p>${entry.content}</p>
             <small><i>${entry.date}</i></small>
-            <button class="edit-btn">Edit</button>
-            <button class="delete-btn">Delete</button>
+            <button class="edit-btn" onclick="editEntry(${entry.id})">Edit</button>
+            <button class="delete-btn" onclick="deleteEntry(${entry.id})">Delete</button>
         `;
         container.appendChild(entryElement);
     });
+}
+
+function editEntry(id) {
+    const entry = entries.find(e => e.id === id);
+    document.getElementById('blogInput').value = entry.content;
+    selectedMood = entry.mood;
+    document.querySelectorAll('.mood-btn').forEach(button => button.classList.remove('selected'));
+    document.querySelector(`[data-mood="${selectedMood}"]`).classList.add('selected');
+
+    // Remove the entry and re-post it after editing
+    deleteEntry(id);
+}
+
+function deleteEntry(id) {
+    entries = entries.filter(entry => entry.id !== id);
+    displayEntries();
 }
