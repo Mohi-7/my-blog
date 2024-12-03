@@ -46,6 +46,11 @@ header h1 {
     transform: scale(1.2);
 }
 
+.mood-btn.selected {
+    border: 2px solid #0077ff;
+    background-color: #e0f7ff;
+}
+
 .entry-section {
     display: flex;
     flex-direction: column;
@@ -84,6 +89,18 @@ button:hover {
     background-color: #0056cc;
 }
 
+.search-section {
+    margin-bottom: 20px;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid #0077ff;
+    font-size: 1em;
+}
+
 .entries {
     margin-top: 20px;
 }
@@ -98,6 +115,24 @@ button:hover {
     padding: 10px;
     margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+button.edit-btn,
+button.delete-btn {
+    background-color: #0077ff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-right: 10px;
+}
+
+button.edit-btn:hover,
+button.delete-btn:hover {
+    background-color: #0056cc;
 }
 
 footer {
