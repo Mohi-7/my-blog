@@ -6,6 +6,7 @@ const moodButtons = document.querySelectorAll('.mood-btn');
 const searchInput = document.getElementById('searchInput');
 
 let mood = localStorage.getItem('selectedMood') || '';
+let editingId = null;
 
 // Highlight stored mood on load
 if (mood) {
@@ -16,26 +17,34 @@ moodButtons.forEach(button => {
     button.addEventListener('click', () => {
         mood = button.dataset.mood;
         localStorage.setItem('selectedMood', mood);
-        alert(`Mood selected: ${mood}`);
         moodButtons.forEach(btn => btn.classList.remove('selected'));
         button.classList.add('selected');
     });
 });
 
+function generateId() {
+    return Date.now().toString();
+}
+
 function loadEntries(searchTerm = '') {
     const entries = JSON.parse(localStorage.getItem('entries')) || [];
     entriesContainer.innerHTML = '';
+    
     entries.forEach(entry => {
         if (entry.text.toLowerCase().includes(searchTerm.toLowerCase())) {
             const entryElement = document.createElement('div');
             entryElement.classList.add('entry', 'new');
             entryElement.innerHTML = `
-                <p><strong>Date:</strong> ${entry.date}</p>
-                <p><strong>Mood:</strong> ${entry.mood}</p>
-                <p><strong>Category:</strong> ${entry.category}</p>
-                <p>${entry.text}</p>
-                <button class="edit-btn">Edit</button>
-                <button class="delete-btn">Delete</button>
+                <div class="entry-content">
+                    <p><strong>Date:</strong> ${entry.date}</p>
+                    <p><strong>Mood:</strong> ${entry.mood}</p>
+                    <p><strong>Category:</strong> ${entry.category}</p>
+                    <p>${entry.text}</p>
+                </div>
+                <div class="entry-buttons">
+                    <button class="edit-btn" data-id="${entry.id}">Edit</button>
+                    <button class="delete-btn" data-id="${entry.id}">Delete</button>
+                </div>
             `;
             entriesContainer.appendChild(entryElement);
             setTimeout(() => entryElement.classList.remove('new'), 500);
@@ -50,7 +59,6 @@ function updateMoodChart() {
         if (entry.mood in moodCounts) moodCounts[entry.mood]++;
     });
 
-    // Destroy existing chart if it exists to prevent overlap
     if (window.moodChart) window.moodChart.destroy();
 
     const ctx = document.getElementById('moodChart').getContext('2d');
@@ -67,37 +75,85 @@ function updateMoodChart() {
     });
 }
 
-postButton.addEventListener('click', () => {
-    const text = blogInput.value;
+function handlePost() {
+    const text = blogInput.value.trim();
     const category = categorySelect.value;
+    
     if (!text || !mood) {
         alert('Please write something and select your mood!');
         return;
     }
 
     const entries = JSON.parse(localStorage.getItem('entries')) || [];
-    entries.push({ mood, category, text, date: new Date().toLocaleString() });
+    
+    if (editingId) {
+        // Update existing entry
+        const index = entries.findIndex(entry => entry.id === editingId);
+        if (index > -1) {
+            entries[index] = {
+                ...entries[index],
+                text,
+                mood,
+                category,
+                date: new Date().toLocaleString()
+            };
+        }
+        editingId = null;
+        postButton.textContent = 'Post Entry';
+    } else {
+        // Create new entry
+        entries.push({
+            id: generateId(),
+            mood,
+            category,
+            text,
+            date: new Date().toLocaleString()
+        });
+    }
+
     localStorage.setItem('entries', JSON.stringify(entries));
     blogInput.value = '';
     loadEntries();
     updateMoodChart();
-});
+}
+
+function handleEdit(id) {
+    const entries = JSON.parse(localStorage.getItem('entries')) || [];
+    const entry = entries.find(entry => entry.id === id);
+    
+    if (entry) {
+        blogInput.value = entry.text;
+        categorySelect.value = entry.category;
+        mood = entry.mood;
+        moodButtons.forEach(btn => {
+            btn.classList.toggle('selected', btn.dataset.mood === entry.mood);
+        });
+        editingId = id;
+        postButton.textContent = 'Update Entry';
+    }
+}
+
+function handleDelete(id) {
+    const entries = JSON.parse(localStorage.getItem('entries')) || [];
+    const updatedEntries = entries.filter(entry => entry.id !== id);
+    localStorage.setItem('entries', JSON.stringify(updatedEntries));
+    loadEntries();
+    updateMoodChart();
+}
+
+postButton.addEventListener('click', handlePost);
 
 searchInput.addEventListener('input', () => {
     loadEntries(searchInput.value);
 });
 
 entriesContainer.addEventListener('click', (e) => {
+    const id = e.target.dataset.id;
+    
     if (e.target.classList.contains('delete-btn')) {
-        const entryElement = e.target.parentElement;
-        const text = entryElement.querySelector('p:nth-child(4)').textContent;
-        const entries = JSON.parse(localStorage.getItem('entries')) || [];
-        const updatedEntries = entries.filter(entry => entry.text !== text);
-        localStorage.setItem('entries', JSON.stringify(updatedEntries));
-        loadEntries();
-        updateMoodChart();
+        handleDelete(id);
     } else if (e.target.classList.contains('edit-btn')) {
-        alert('Edit functionality coming soon!');
+        handleEdit(id);
     }
 });
 
