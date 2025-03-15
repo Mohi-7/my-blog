@@ -1,3 +1,10 @@
+// Only needed change - remove the mood chart functionality since it's not in your HTML
+// Remove these parts from the previous JavaScript code:
+// 1. The updateMoodChart function
+// 2. All calls to updateMoodChart()
+// 3. The mood chart destruction logic
+
+// Here's the adjusted JavaScript that perfectly matches your HTML/CSS:
 const postButton = document.getElementById('postButton');
 const blogInput = document.getElementById('blogInput');
 const categorySelect = document.getElementById('category');
@@ -8,7 +15,7 @@ const searchInput = document.getElementById('searchInput');
 let mood = localStorage.getItem('selectedMood') || '';
 let editingId = null;
 
-// Highlight stored mood on load
+// Mood selection remains identical to your existing CSS structure
 if (mood) {
     document.querySelector(`[data-mood="${mood}"]`).classList.add('selected');
 }
@@ -52,29 +59,6 @@ function loadEntries(searchTerm = '') {
     });
 }
 
-function updateMoodChart() {
-    const entries = JSON.parse(localStorage.getItem('entries')) || [];
-    const moodCounts = { happy: 0, neutral: 0, sad: 0 };
-    entries.forEach(entry => {
-        if (entry.mood in moodCounts) moodCounts[entry.mood]++;
-    });
-
-    if (window.moodChart) window.moodChart.destroy();
-
-    const ctx = document.getElementById('moodChart').getContext('2d');
-    window.moodChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Happy', 'Neutral', 'Sad'],
-            datasets: [{
-                data: [moodCounts.happy, moodCounts.neutral, moodCounts.sad],
-                backgroundColor: ['#4CAF50', '#FFC107', '#F44336']
-            }]
-        },
-        options: { responsive: true }
-    });
-}
-
 function handlePost() {
     const text = blogInput.value.trim();
     const category = categorySelect.value;
@@ -87,7 +71,6 @@ function handlePost() {
     const entries = JSON.parse(localStorage.getItem('entries')) || [];
     
     if (editingId) {
-        // Update existing entry
         const index = entries.findIndex(entry => entry.id === editingId);
         if (index > -1) {
             entries[index] = {
@@ -101,7 +84,6 @@ function handlePost() {
         editingId = null;
         postButton.textContent = 'Post Entry';
     } else {
-        // Create new entry
         entries.push({
             id: generateId(),
             mood,
@@ -114,7 +96,6 @@ function handlePost() {
     localStorage.setItem('entries', JSON.stringify(entries));
     blogInput.value = '';
     loadEntries();
-    updateMoodChart();
 }
 
 function handleEdit(id) {
@@ -138,7 +119,6 @@ function handleDelete(id) {
     const updatedEntries = entries.filter(entry => entry.id !== id);
     localStorage.setItem('entries', JSON.stringify(updatedEntries));
     loadEntries();
-    updateMoodChart();
 }
 
 postButton.addEventListener('click', handlePost);
@@ -159,4 +139,3 @@ entriesContainer.addEventListener('click', (e) => {
 
 // Initial load
 loadEntries();
-updateMoodChart();
